@@ -1,81 +1,100 @@
-# 🚀 Machete Final: POO, Estructuras y Control de Flujo
+# 🚀 Resumen Final: Java Avanzado, Colecciones y Excepciones
 
-## 1. POO: Abstracción y Diseño
+## 1. Organización y Tipos de Datos
 
-### Encapsulamiento 🛡️
-* **Definición:** Ocultar los datos internos de una clase y exponer solo las operaciones seguras.
-* **Mecanismo:** Atributos `private` y acceso mediante métodos `public` (Getters/Setters).
+### Organización del Código
+* **Paquetes (`package`):** Son carpetas lógicas que agrupan clases relacionadas. Su función principal es crear un **Namespace** (espacio de nombres) para evitar conflictos si dos clases se llaman igual en librerías distintas.
+* **Importación (`import`):** Es la instrucción para utilizar una clase que vive en otro paquete.
 
-### Clase Abstracta vs. Interfaz
-* **Clase Abstracta:**
-    * **Relación:** "ES UN" (Herencia).
-    * **Contenido:** Puede tener métodos con código (para reutilizar) y métodos abstractos.
-    * **Restricción:** Solo se puede heredar (`extends`) de **una** clase abstracta.
-* **Interfaz:**
-    * **Relación:** "PUEDE HACER" (Contrato).
-    * **Contenido:** Solo define la firma de métodos (no tiene atributos de estado).
-    * **Restricción:** Se pueden implementar (`implements`) **múltiples** interfaces.
+### Modelado de Problemas
+* Se basa en representar entidades reales como **Clases**.
+* Las relaciones se definen por:
+    * **Herencia ("Es Un"):** Una clase adquiere propiedades de otra.
+    * **Composición/Agregación ("Tiene Un"):** Una clase tiene a otra como atributo (ej: Un `Curso` tiene una `List<Alumno>`).
 
-### `equals()` y `hashCode()`
-* **`==`:** Compara si dos objetos son la **misma referencia** en memoria.
-* **`.equals()`:** Debe ser redefinido para comparar el **contenido lógico** (ej. la patente).
-* **`hashCode()`:** Debe ser redefinido junto con `equals()`. Es vital para que funcionen colecciones tipo `Set` y `Map`.
+### Wrappers (Clases Envolventes) 📦
+* **Definición:** Son Clases (`Integer`, `Double`, `Boolean`) que envuelven a los tipos primitivos (`int`, `double`, `boolean`).
+* **¿Por qué existen?** Las Colecciones (`ArrayList`, etc.) **SOLO guardan Objetos**, no primitivos. Además, los Wrappers permiten valores `null`.
+* **Autoboxing:** Java convierte automáticamente Primitivo → Wrapper.
+* **Unboxing:** Java convierte automáticamente Wrapper → Primitivo.
 
 ---
 
-## 2. Tipos de Datos y Wrappers 📦
+## 2. UNIDAD 4: Estructuras de Datos y Colecciones
 
-### Wrappers (`Integer` vs. `int`)
-* **`int`:** Tipo **primitivo**. Rápido, simple, no puede ser `null`.
-* **`Integer`:** **Clase Objeto** (Wrapper).
-* **Propósito:** Permite almacenar primitivos en colecciones (ej. `ArrayList<Integer>`) y usar el valor `null` (ausencia de valor).
-* **Autoboxing/Unboxing:** La conversión entre `int` e `Integer` se hace automáticamente.
+### Concepto: TAD (Tipo Abstracto de Dato)
+* Es la definición teórica de **QUÉ** hace una estructura (sus operaciones: insertar, borrar, buscar), sin importar **CÓMO** está programada por dentro.
 
-### `static` y `final`
-* **`static`:** El miembro pertenece a la **Clase**, no a un objeto. Se comparte entre todas las instancias (Ej: `flota` de vehículos).
-* **`final`:** Indica inmutabilidad. Una variable `final` no puede cambiar su valor.
+### Tipos de Listas (Conceptuales)
+* **Lista Estática:** Tamaño fijo en memoria (Array). Rápida lectura, imposible redimensionar.
+* **Lista Dinámica:** Crece según demanda.
+* **Doblemente Enlazada:** Cada nodo conoce al siguiente y al **anterior** (permite recorrer en ambas direcciones).
+* **Circular:** El último nodo apunta al primero (no tiene fin).
+
+### Java Collections Framework (JCF) 📚
+
+**A. Interfaz LIST (Ordenada, permite duplicados)**
+* **`ArrayList`:**
+    * Basada en Array redimensionable.
+    * **Lectura:** Muy rápida O(1) por índice.
+    * **Escritura:** Lenta en el medio (debe desplazar elementos).
+    * **Uso:** 90% de los casos.
+* **`LinkedList`:**
+    * Basada en Nodos doblemente enlazados.
+    * **Lectura:** Lenta O(n) (debe recorrer).
+    * **Escritura:** Muy rápida en extremos (inicio/fin).
+    * **Uso:** Pilas, Colas.
+
+**B. Interfaz SET (Sin orden garantizado, NO permite duplicados)**
+* **`HashSet`:**
+    * Basada en Tabla Hash.
+    * **Velocidad:** Extremadamente rápida para buscar e insertar.
+    * **Orden:** Aleatorio (no se puede confiar en el orden).
+* **`TreeSet`:**
+    * Basada en Árbol Rojo-Negro.
+    * **Orden:** Mantiene los elementos **ordenados naturalmente** (alfabético o numérico).
+    * **Velocidad:** Más lenta que HashSet.
+
+**C. Interfaz MAP (Clave-Valor)**
+* **`HashMap`:**
+    * Guarda pares (Key, Value).
+    * Las claves son un `Set` (únicas) y los valores una `Collection`.
+    * Acceso casi instantáneo a cualquier valor si tienes la clave.
+
+**D. PriorityQueue**
+* Cola de prioridad. Los elementos salen no por orden de llegada, sino por su "importancia" (orden natural o definido por Comparator).
+
+### Herramientas de Colecciones
+* **Iteradores (`Iterator`):** Objeto que permite recorrer una colección y **eliminar** elementos de forma segura durante el recorrido (evita errores de concurrencia).
+* **`Comparable` vs `Comparator`:**
+    * **Comparable:** Se implementa en la clase (método `compareTo`). Define el "orden natural" del objeto.
+    * **Comparator:** Es una clase externa o lambda. Define criterios de ordenamiento flexibles (ej: ordenar por DNI, luego por Apellido).
+* **`equals()` y `hashCode()`:**
+    * Son vitales para `HashSet` y `HashMap`.
+    * Si dos objetos son `equals()`, **deben** tener el mismo `hashCode()`. Si no, las colecciones fallan al buscar o eliminar.
 
 ---
 
-## 3. Estructuras de Datos Lineales
+## 3. UNIDAD 5: Excepciones y Persistencia
 
-### La Lógica de Rendimiento (Array vs. Nodo)
+### Diferencias Clave
+* **Error:** Fallos graves e irrecuperables de la JVM (ej. `OutOfMemoryError`). No se deben capturar.
+* **Excepción:** Eventos esperables que el programa puede manejar y recuperarse (ej. archivo no encontrado, dato inválido).
 
-| Operación | ArrayList (Array) | LinkedList (Nodo) | Lógica Detrás |
-| :--- | :--- | :--- | :--- |
-| **Acceso (`get(i)`)** | **RÁPIDO (O(1))** 🚀 | LENTO (O(n)) 🐢 | Array salta directo. Nodo debe "caminar" desde `head`. |
-| **Insertar/Borrar (Inicio)** | LENTO (O(n)) 🐢 | **RÁPIDO (O(1))** 🚀 | Array debe "desplazar todo". Nodo solo re-engancha `head`. |
+### Jerarquía de Excepciones
+1.  **Throwable:** La clase padre de todo.
+2.  **Exception (Checked):** El compilador **te obliga** a manejarlas (`try-catch` o `throws`). Suelen ser fallos externos (IO, SQL).
+3.  **RuntimeException (Unchecked):** El compilador **no obliga** a manejarlas. Suelen ser errores de lógica del programador (DivisionPorCero, NullPointer).
 
-### `ArrayList` (La Implementación con Arrays)
-* **Ventaja:** Velocidad de lectura por índice.
-* **Lógica `insertar`:** Requiere **"mover a la derecha"** (bucle `for` hacia atrás) para crear un hueco.
-* **Lógica `remove`:** Requiere **"mover a la izquierda"** (bucle `for` hacia adelante) para tapar el hueco.
+### Bloques de Control
+* **`try`:** Envuelve el código riesgoso.
+* **`catch`:** Atrapa la excepción y ejecuta código de recuperación.
+* **`finally`:** Se ejecuta **SIEMPRE**. Se usa obligatoriamente para liberar recursos (cerrar archivos, base de datos) para evitar fugas de memoria.
 
-### `LinkedList` (La Implementación con Nodos) ⛓️
-* **Estructura:** Cada **`Node`** guarda el dato y un puntero **`next`** al siguiente. La lista solo conoce el `head` (inicio) y el `tail` (final).
-* **Lógica `addFirst`:** Es instantánea. `nuevo.next = head;` y `head = nuevo;` (Dos re-enganches).
-* **Recorrido:** Se usa un puntero temporal (`actual`) con un bucle `while (actual != null)` para ir avanzando (`actual = actual.next`).
+### Propagación y Generación
+* **`throw` (Lanzar):** Es una acción. Se usa **dentro** del método para disparar una excepción manualmente. (Ej: `throw new MiError();`).
+* **`throws` (Avisar):** Es una declaración. Se usa en la **firma** del método para avisar que ese método *podría* lanzar una excepción y que quien lo llame debe hacerse cargo.
 
-### `Set` (Conjuntos)
-* **Concepto:** Colección que **garantiza unicidad** (no permite duplicados).
-* **`LinkedHashSet`:** Mantiene el requisito de unicidad del `Set` y, además, **mantiene el orden de inserción**.
-
----
-
-## 4. Algoritmos y Control de Flujo
-
-### Recursividad 🔄
-* Una función que se llama a sí misma para resolver un sub-problema más simple.
-* **Componentes Vitales:**
-    1.  **Caso Base:** La condición de salida que detiene la recursión (si no está, da `StackOverflowError`).
-    2.  **Paso Recursivo:** La llamada a sí misma con el problema achicándose (ej. `indice + 1`).
-
-### Lambdas y Streams (`->`)
-* **Lambda:** Función anónima (`(param) -> { código }`) que simplifica la sintaxis.
-* **`forEach(v -> ...)`:** Uso de la Interfaz Funcional `Consumer` para recorrer la lista.
-* **`removeIf(v -> ...)`:** Uso de la Interfaz Funcional `Predicate` para eliminar elementos que cumplan una condición (`return true`).
-
-### Excepciones y Propagación
-* **Propagación:** Cuando un método no quiere manejar una excepción, la delega al llamador con la palabra clave **`throws`** en la firma del método.
-* **`throw`:** Se usa dentro del código para **lanzar** una excepción manualmente (ej. `throw new DuracionInvalidaException(...)`). Esto corta la ejecución de inmediato.
-* **`finally`:** Se ejecuta **SIEMPRE**, haya ocurrido un `try-catch` o no. Es para liberar recursos.
+### Excepciones Personalizadas
+* Se crean heredando de `Exception` (si quieres que sea obligatoria de manejar) o `RuntimeException`.
+* Siempre deben tener un constructor que reciba el mensaje y llame a `super(mensaje)`.
