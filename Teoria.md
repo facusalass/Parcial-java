@@ -1,107 +1,81 @@
-# 🧠 Resumen Teórico: Java y Estructuras de Datos
+# 🚀 Machete Final: POO, Estructuras y Control de Flujo
 
-## 1. POO: Conceptos Básicos
+## 1. POO: Abstracción y Diseño
 
-### Clase vs. Objeto
-* **Clase:** Es el plano, molde o plantilla. No existe en la memoria de ejecución (es solo definición).
-* **Objeto:** Es la instancia concreta creada a partir de la clase (usando `new`). Ocupa espacio en memoria y tiene estado.
+### Encapsulamiento 🛡️
+* **Definición:** Ocultar los datos internos de una clase y exponer solo las operaciones seguras.
+* **Mecanismo:** Atributos `private` y acceso mediante métodos `public` (Getters/Setters).
 
-### Encapsulamiento
-* Es la técnica de ocultar el estado interno del objeto para protegerlo.
-* **Cómo se aplica:** Definiendo atributos como `private` y exponiéndolos mediante métodos `public` (Getters y Setters).
-* **Objetivo:** Validar datos antes de asignarlos y reducir el acoplamiento.
+### Clase Abstracta vs. Interfaz
+* **Clase Abstracta:**
+    * **Relación:** "ES UN" (Herencia).
+    * **Contenido:** Puede tener métodos con código (para reutilizar) y métodos abstractos.
+    * **Restricción:** Solo se puede heredar (`extends`) de **una** clase abstracta.
+* **Interfaz:**
+    * **Relación:** "PUEDE HACER" (Contrato).
+    * **Contenido:** Solo define la firma de métodos (no tiene atributos de estado).
+    * **Restricción:** Se pueden implementar (`implements`) **múltiples** interfaces.
 
-### Sobrecarga vs. Sobreescritura
-* **Sobrecarga (Overloading):** Ocurre en la **misma clase**. Es tener métodos con el mismo nombre pero **distintos parámetros** (cantidad o tipo).
-* **Sobreescritura (Overriding):** Ocurre en **herencia** (subclases). Es redefinir un método del padre con la **misma firma** (mismo nombre y parámetros). Se usa `@Override`.
-
-### Paso por Valor
-* Java siempre pasa copias de los valores.
-* Cuando pasas un objeto a un método, pasas una **copia de la referencia** (la dirección de memoria).
-* **Consecuencia:** Si modificas los atributos del objeto adentro del método, el cambio se ve afuera (porque apuntan al mismo lugar). Si reasignas la variable (`v = new Auto()`), no afecta al original.
-
----
-
-## 2. Relaciones y Abstracción
-
-### Herencia (`extends`)
-* Relación **"ES UN"**. (Ej: El Auto ES UN Vehículo).
-* Permite reutilizar código y atributos de la clase padre.
-
-### Polimorfismo
-* Capacidad de un objeto de ser tratado como si fuera de su clase padre o una interfaz.
-* Permite flexibilidad: guardar `Auto` y `Moto` dentro de una misma lista de tipo `Vehiculo`.
-
-### Clase Abstracta (`abstract class`)
-* Relación: **"ES UN"** (Herencia).
-* Es una base incompleta. **No se puede instanciar** (no podés hacer `new`).
-* Puede tener métodos con código (para reutilizar) y métodos abstractos (para obligar a implementar).
-* **Regla:** Una clase solo puede heredar de **UNA** clase abstracta.
-
-### Interfaz (`interface`)
-* Relación: **"PUEDE HACER"** (Comportamiento/Habilidad).
-* Es un contrato puro. Solo define **qué** se debe hacer, no **cómo**.
-* No tiene atributos de estado (solo constantes).
-* **Regla:** Una clase puede implementar **MÚLTIPLES** interfaces.
+### `equals()` y `hashCode()`
+* **`==`:** Compara si dos objetos son la **misma referencia** en memoria.
+* **`.equals()`:** Debe ser redefinido para comparar el **contenido lógico** (ej. la patente).
+* **`hashCode()`:** Debe ser redefinido junto con `equals()`. Es vital para que funcionen colecciones tipo `Set` y `Map`.
 
 ---
 
-## 3. Manejo de Errores (Excepciones)
+## 2. Tipos de Datos y Wrappers 📦
 
-### Jerarquía
-* **Error:** Fallos graves de la JVM (memoria llena, desbordamiento de pila). No se pueden recuperar.
-* **Exception:** Fallos del programa que debemos gestionar.
+### Wrappers (`Integer` vs. `int`)
+* **`int`:** Tipo **primitivo**. Rápido, simple, no puede ser `null`.
+* **`Integer`:** **Clase Objeto** (Wrapper).
+* **Propósito:** Permite almacenar primitivos en colecciones (ej. `ArrayList<Integer>`) y usar el valor `null` (ausencia de valor).
+* **Autoboxing/Unboxing:** La conversión entre `int` e `Integer` se hace automáticamente.
 
-### Bloques de Control
-* **Try:** Envuelve el código que puede fallar.
-* **Catch:** Captura el error para evitar que el programa se cierre inesperadamente.
-* **Finally:** Se ejecuta **SIEMPRE**, haya error o no. Se usa para cerrar recursos (conexiones a BD, Scanners, archivos).
-
----
-
-## 4. Estructuras de Datos (EL NÚCLEO)
-
-### A. ArrayList (Lista Dinámica basada en Array)
-* **Estructura:** Un bloque de memoria **contiguo** (elementos uno al lado del otro, como una caja de huevos).
-* **Lectura `get(i)`:** **MUY RÁPIDA O(1)**. Calcula matemáticamente la posición y salta directo.
-* **Insertar/Borrar (Inicio o Medio):** **LENTA O(n)**. Requiere **desplazar** todos los elementos siguientes para hacer lugar o tapar el hueco.
-* **Uso:** 99% de los casos (cuando lees más de lo que modificas en el medio).
-
-### B. LinkedList (Lista Enlazada basada en Nodos)
-* **Estructura:** Nodos dispersos en memoria conectados por referencias (`next`).
-* **Lectura `get(i)`:** **LENTA O(n)**. No puede saltar. Tiene que "caminar" nodo por nodo desde el inicio (`head`).
-* **Insertar/Borrar (Inicio o Final):** **MUY RÁPIDA O(1)**. Solo requiere cambiar referencias (punteros). No mueve elementos.
-* **Uso:** 1% de los casos (Pilas, Colas).
+### `static` y `final`
+* **`static`:** El miembro pertenece a la **Clase**, no a un objeto. Se comparte entre todas las instancias (Ej: `flota` de vehículos).
+* **`final`:** Indica inmutabilidad. Una variable `final` no puede cambiar su valor.
 
 ---
 
-## 5. Lógica de Implementación (Cómo funcionan por dentro)
+## 3. Estructuras de Datos Lineales
 
-### En Lista Estática (Array)
-* **Insertar en el medio:** Lógica de **"Mover a la derecha"**. Se usa un bucle hacia atrás para copiar el elemento actual en el siguiente (`i+1`) y liberar el espacio.
-* **Eliminar del medio:** Lógica de **"Mover a la izquierda"**. Se usa un bucle hacia adelante para copiar el elemento siguiente (`i+1`) en el actual (`i`) y tapar el hueco.
+### La Lógica de Rendimiento (Array vs. Nodo)
 
-### En Lista Enlazada (Nodos)
-* **Insertar al Inicio (`addFirst`):** Lógica de **"Re-enganchar"**.
-    1. El `nuevoNodo` apunta al `head` actual.
-    2. La etiqueta `head` se mueve al `nuevoNodo`.
-* **Recorrer:** Se usa un puntero temporal (`actual`) y un bucle `while (actual != null)` que avanza con `actual = actual.next`.
+| Operación | ArrayList (Array) | LinkedList (Nodo) | Lógica Detrás |
+| :--- | :--- | :--- | :--- |
+| **Acceso (`get(i)`)** | **RÁPIDO (O(1))** 🚀 | LENTO (O(n)) 🐢 | Array salta directo. Nodo debe "caminar" desde `head`. |
+| **Insertar/Borrar (Inicio)** | LENTO (O(n)) 🐢 | **RÁPIDO (O(1))** 🚀 | Array debe "desplazar todo". Nodo solo re-engancha `head`. |
+
+### `ArrayList` (La Implementación con Arrays)
+* **Ventaja:** Velocidad de lectura por índice.
+* **Lógica `insertar`:** Requiere **"mover a la derecha"** (bucle `for` hacia atrás) para crear un hueco.
+* **Lógica `remove`:** Requiere **"mover a la izquierda"** (bucle `for` hacia adelante) para tapar el hueco.
+
+### `LinkedList` (La Implementación con Nodos) ⛓️
+* **Estructura:** Cada **`Node`** guarda el dato y un puntero **`next`** al siguiente. La lista solo conoce el `head` (inicio) y el `tail` (final).
+* **Lógica `addFirst`:** Es instantánea. `nuevo.next = head;` y `head = nuevo;` (Dos re-enganches).
+* **Recorrido:** Se usa un puntero temporal (`actual`) con un bucle `while (actual != null)` para ir avanzando (`actual = actual.next`).
+
+### `Set` (Conjuntos)
+* **Concepto:** Colección que **garantiza unicidad** (no permite duplicados).
+* **`LinkedHashSet`:** Mantiene el requisito de unicidad del `Set` y, además, **mantiene el orden de inserción**.
 
 ---
 
-## 6. Funcionalidades Modernas
+## 4. Algoritmos y Control de Flujo
 
-### Recursividad
-* Una función que se llama a sí misma.
-* **Componente 1 (Caso Base):** La condición de salida. Si falta, ocurre un `StackOverflowError`.
-* **Componente 2 (Paso Recursivo):** La llamada a sí misma con un dato más pequeño.
+### Recursividad 🔄
+* Una función que se llama a sí misma para resolver un sub-problema más simple.
+* **Componentes Vitales:**
+    1.  **Caso Base:** La condición de salida que detiene la recursión (si no está, da `StackOverflowError`).
+    2.  **Paso Recursivo:** La llamada a sí misma con el problema achicándose (ej. `indice + 1`).
 
-### Lambdas (`->`)
-* Funciones anónimas para escribir código conciso.
-* **`forEach`:** Para recorrer listas.
-* **`removeIf`:** Para borrar elementos que cumplan una condición.
+### Lambdas y Streams (`->`)
+* **Lambda:** Función anónima (`(param) -> { código }`) que simplifica la sintaxis.
+* **`forEach(v -> ...)`:** Uso de la Interfaz Funcional `Consumer` para recorrer la lista.
+* **`removeIf(v -> ...)`:** Uso de la Interfaz Funcional `Predicate` para eliminar elementos que cumplan una condición (`return true`).
 
-### Equals y HashCode
-* **`==`**: Compara **referencia de memoria** (¿Son el mismo objeto físico?).
-* **`.equals()`**: Compara **contenido** (¿Tienen los mismos datos?). Debe ser redefinido.
-* **Regla:** Si redefines `equals`, debes redefinir `hashCode` para que las colecciones (`HashSet`, `HashMap`) funcionen bien.
+### Excepciones y Propagación
+* **Propagación:** Cuando un método no quiere manejar una excepción, la delega al llamador con la palabra clave **`throws`** en la firma del método.
+* **`throw`:** Se usa dentro del código para **lanzar** una excepción manualmente (ej. `throw new DuracionInvalidaException(...)`). Esto corta la ejecución de inmediato.
+* **`finally`:** Se ejecuta **SIEMPRE**, haya ocurrido un `try-catch` o no. Es para liberar recursos.
