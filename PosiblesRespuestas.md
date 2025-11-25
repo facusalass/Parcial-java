@@ -106,3 +106,120 @@ public class Main {
         }
     }
 }
+
+## Implemente en la clase Inventario el método agregarAuto(Auto auto)
+
+```java
+public boolean agregarAuto(Auto auto) {
+    // 1. Recorremos la lista para ver si la patente ya existe
+    for (Auto a : autos) {
+        // Usamos equals para comparar Strings (patentes)
+        if (a.getPatente().equals(auto.getPatente())) {
+            return false; // Ya existe, no agregamos nada
+        }
+    }
+
+    // 2. Si terminó el bucle y no encontró duplicados, agregamos
+    autos.add(auto);
+    return true;
+}
+
+
+## Implemente una excepción que deberá lanzarse al intentar crear un objeto Auto con una cantidad de puertas menor a 3
+
+```java
+// 1. ARCHIVO: PuertasInsuficientesException.java
+public class PuertasInsuficientesException extends Exception {
+
+    public PuertasInsuficientesException(String mensaje) {
+        super(mensaje);
+    }
+
+    public PuertasInsuficientesException() {
+        super("Error: Un auto debe tener al menos 3 puertas.");
+    }
+}
+
+// 2. ARCHIVO: Auto.java
+class Auto extends Vehiculo {
+
+    private int cantidadPuertas;
+
+    public Auto(String marca, int modelo, String patente, int kilometraje, int cantidadPuertas) throws PuertasInsuficientesException {
+        super(marca, modelo, patente, kilometraje);
+
+        if (cantidadPuertas < 3) {
+            throw new PuertasInsuficientesException();
+        }
+
+        this.cantidadPuertas = cantidadPuertas;
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + " | Puertas: " + cantidadPuertas;
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        try {
+            Auto miAuto = new Auto("Ford", 2022, "AA123BB", 10000, 2);
+            System.out.println("Auto creado con éxito");
+
+        } catch (PuertasInsuficientesException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+}
+
+## Implementar los métodos para determinar si dos vehículos se consideran iguales únicamente si tienen la misma patente
+
+```java
+@Override
+public boolean equals(Object o) {
+    if (this == o) return true;
+    
+    if (o == null || !(o instanceof Vehiculo)) return false;
+    
+    Vehiculo otro = (Vehiculo) o;
+    
+    return this.patente.equals(otro.patente);
+}
+
+@Override
+public int hashCode() {
+    return java.util.Objects.hash(patente);
+}
+
+## Implemente en la clase Auto el método requerido por la interface correspondiente
+
+```java
+@Override
+public double calcularPrecioFinal(double precioBase) {
+    int anioActual = 2025;
+    int aniosUso = anioActual - getModelo();
+    
+    if (aniosUso < 0) { 
+        aniosUso = 0; 
+    }
+
+    // Primero bajamos el precio según la antigüedad
+    double depreciacionTotal = aniosUso * 0.05;
+    double precioDepreciado = precioBase - (precioBase * depreciacionTotal);
+
+    double porcentajeAdicional = 0.0;
+    
+    if (cantPuertas == 3) {
+        porcentajeAdicional = 0.30; // 30%
+    } else if (cantPuertas == 4) {
+        porcentajeAdicional = 0.40; // 40%
+    } else {
+        porcentajeAdicional = 0.35; // 35% para el resto
+    }
+
+   
+    double precioFinal = precioDepreciado + (precioDepreciado * porcentajeAdicional);
+
+    return (precioFinal > 0) ? precioFinal : 0;
+}
