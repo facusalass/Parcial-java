@@ -1,4 +1,6 @@
 
+
+````markdown
 ## En la clase Computadora, implementar los métodos para asegurar que dos computadoras sean consideradas iguales únicamente si tienen el mismo número de serie
 
 ```java
@@ -17,13 +19,12 @@ public boolean equals(Object o) {
 public Computadora buscarComputadora(String numeroSerie) {
     for (Escritorio e : escritorios) {
         if (e.getNumeroSerie().equals(numeroSerie)) {
-            return e; // Retornamos el objeto encontrado
+            return e;
         }
     }
     for (Laptop l : laptops) {
-        // Usamos el getter del objeto 'l'
         if (l.getNumeroSerie().equals(numeroSerie)) {
-            return l; // Retornamos el objeto encontrado
+            return l; 
         }
     }
     return null;
@@ -106,24 +107,22 @@ public class Main {
         }
     }
 }
+```
 
 ## Implemente en la clase Inventario el método agregarAuto(Auto auto)
 
 ```java
 public boolean agregarAuto(Auto auto) {
-    // 1. Recorremos la lista para ver si la patente ya existe
     for (Auto a : autos) {
-        // Usamos equals para comparar Strings (patentes)
         if (a.getPatente().equals(auto.getPatente())) {
             return false; // Ya existe, no agregamos nada
         }
     }
 
-    // 2. Si terminó el bucle y no encontró duplicados, agregamos
     autos.add(auto);
     return true;
 }
-
+```
 
 ## Implemente una excepción que deberá lanzarse al intentar crear un objeto Auto con una cantidad de puertas menor a 3
 
@@ -148,7 +147,7 @@ class Auto extends Vehiculo {
     public Auto(String marca, int modelo, String patente, int kilometraje, int cantidadPuertas) throws PuertasInsuficientesException {
         super(marca, modelo, patente, kilometraje);
 
-        if (cantidadPuertas < 3) {
+        if (cantidadPuertos < 3) {
             throw new PuertasInsuficientesException();
         }
 
@@ -172,6 +171,7 @@ public class Main {
         }
     }
 }
+```
 
 ## Implementar los métodos para determinar si dos vehículos se consideran iguales únicamente si tienen la misma patente
 
@@ -191,6 +191,7 @@ public boolean equals(Object o) {
 public int hashCode() {
     return java.util.Objects.hash(patente);
 }
+```
 
 ## Implemente en la clase Auto el método requerido por la interface correspondiente
 
@@ -204,7 +205,6 @@ public double calcularPrecioFinal(double precioBase) {
         aniosUso = 0; 
     }
 
-    // Primero bajamos el precio según la antigüedad
     double depreciacionTotal = aniosUso * 0.05;
     double precioDepreciado = precioBase - (precioBase * depreciacionTotal);
 
@@ -217,9 +217,12 @@ public double calcularPrecioFinal(double precioBase) {
     } else {
         porcentajeAdicional = 0.35; // 35% para el resto
     }
-
-   
+    
     double precioFinal = precioDepreciado + (precioDepreciado * porcentajeAdicional);
 
     return (precioFinal > 0) ? precioFinal : 0;
 }
+```
+
+```
+```
